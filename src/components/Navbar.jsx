@@ -1,7 +1,9 @@
 import React from "react";
 import { assets } from "../assets/assets";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   return (
     <>
       <div className="w-full flex justify-between items-center font-semibold">
@@ -10,11 +12,13 @@ const Navbar = () => {
             className="w-8 bg-black p-2 rounded-2xl cursor-pointer"
             alt=""
             src={assets.arrow_left}
+            onClick={() => navigate(-1)}
           />
           <img
             className="w-8 bg-black p-2 rounded-2xl cursor-pointer"
             alt=""
             src={assets.arrow_right}
+            onClick={() => navigate(1)}
           />
         </div>
 
