@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { assets, songsData } from "../assets/assets";
+import { PlayerContext } from "../context/PlyaerContext";
 
 const Player = () => {
+  const { audioRef, play, pause, playStatus, seekBg, seekBar } =
+    useContext(PlayerContext);
   const handleSongProgress = (e) => {
     const bar = e.currentTarget;
     const { x, width } = bar.getBoundingClientRect();
@@ -28,7 +31,21 @@ const Player = () => {
             alt=""
           />
           <img className="w-4 cursor-pointer " src={assets.prev_icon} alt="" />
-          <img className="w-4 cursor-pointer " src={assets.play_icon} alt="" />
+          {!playStatus ? (
+            <img
+              className="w-4 cursor-pointer "
+              src={assets.play_icon}
+              alt=""
+              onClick={() => play()}
+            />
+          ) : (
+            <img
+              className="w-4 cursor-pointer "
+              src={assets.pause_icon}
+              alt=""
+              onClick={() => pause()}
+            />
+          )}
           <img className="w-4 cursor-pointer " src={assets.next_icon} alt="" />
           <img className="w-4 cursor-pointer " src={assets.loop_icon} alt="" />
         </div>
@@ -38,8 +55,12 @@ const Player = () => {
           <div
             className="w-[60vw] max-w-125 rounded-full bg-gray-300 cursor-pointer overflow-hidden"
             onClick={handleSongProgress}
+            ref={seekBg}
           >
-            <hr className="h-1 border-none w-0 bg-green-800 rounded-full" />
+            <hr
+              ref={seekBar}
+              className="h-1 border-none w-0 bg-green-800 rounded-full"
+            />
           </div>
           <p>03.50</p>
         </div>
