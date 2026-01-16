@@ -3,23 +3,54 @@ import { assets, songsData } from "../assets/assets";
 import { PlayerContext } from "../context/PlyaerContext";
 
 const Player = () => {
-  const { audioRef, play, pause, playStatus, seekBg, seekBar } =
-    useContext(PlayerContext);
+  const {
+    audioRef,
+    play,
+    pause,
+    playStatus,
+    seekBg,
+    seekBar,
+    track,
+    time,
+    previous,
+    next,
+  } = useContext(PlayerContext);
+
+  const currentMinute =
+    time.currentTime.minute >= 10
+      ? time.currentTime.minute
+      : "0" + time.currentTime.minute;
+  const currentSecond =
+    time.currentTime.second >= 10
+      ? time.currentTime.second
+      : "0" + time.currentTime.second;
+
+  const totalMinute =
+    time.totalTime.minute >= 10
+      ? time.totalTime.minute
+      : "0" + time.totalTime.minute;
+  const totalSecond =
+    time.totalTime.second >= 10
+      ? time.totalTime.second
+      : "0" + time.totalTime.second;
   const handleSongProgress = (e) => {
     const bar = e.currentTarget;
     const { x, width } = bar.getBoundingClientRect();
+
     const mouseX = e.clientX - x;
     const widthRatio = (mouseX / width) * 100;
+    const currentTime = (widthRatio / 100) * audioRef.current.duration;
+    audioRef.current.currentTime = currentTime;
     const hr = bar.querySelector("hr");
     hr.style.width = widthRatio + "%";
   };
   return (
     <div className="h-1/10 bg-black flex justify-between items-center text-white px-4 ">
       <div className="hidden lg:flex items-center gap-4">
-        <img src={songsData[0].image} alt="" className="w-12" />
+        <img src={track.image} alt="" className="w-12" />
         <div>
-          <p>{songsData[0].name}</p>
-          <p>{songsData[0].desc.slice(0, 18) + "..."}</p>
+          <p>{track.name}</p>
+          <p>{track.desc.slice(0, 18) + "..."}</p>
         </div>
       </div>
 
@@ -30,7 +61,12 @@ const Player = () => {
             src={assets.shuffle_icon}
             alt=""
           />
-          <img className="w-4 cursor-pointer " src={assets.prev_icon} alt="" />
+          <img
+            onClick={previous}
+            className="w-4 cursor-pointer "
+            src={assets.prev_icon}
+            alt=""
+          />
           {!playStatus ? (
             <img
               className="w-4 cursor-pointer "
@@ -46,12 +82,19 @@ const Player = () => {
               onClick={() => pause()}
             />
           )}
-          <img className="w-4 cursor-pointer " src={assets.next_icon} alt="" />
+          <img
+            onClick={next}
+            className="w-4 cursor-pointer "
+            src={assets.next_icon}
+            alt=""
+          />
           <img className="w-4 cursor-pointer " src={assets.loop_icon} alt="" />
         </div>
 
         <div className="flex items-center gap-5">
-          <p>01.22</p>
+          <p>
+            {currentMinute}:{currentSecond}
+          </p>
           <div
             className="w-[60vw] max-w-125 rounded-full bg-gray-300 cursor-pointer overflow-hidden"
             onClick={handleSongProgress}
@@ -62,7 +105,9 @@ const Player = () => {
               className="h-1 border-none w-0 bg-green-800 rounded-full"
             />
           </div>
-          <p>03.50</p>
+          <p>
+            {totalMinute}:{totalSecond}
+          </p>
         </div>
       </div>
       <div className="hidden lg:flex items-center gap-2 opacity-75 ">

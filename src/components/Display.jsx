@@ -8,7 +8,7 @@ const Display = () => {
   const displayRef = useRef();
   const location = useLocation();
   const isAlbum = location.pathname.includes("album");
-  console.log(isAlbum);
+
   const albumId = isAlbum ? location.pathname.split("/").pop() : -1;
 
   useEffect(() => {

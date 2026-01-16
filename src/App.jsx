@@ -7,7 +7,7 @@ import { PlayerContext } from "./context/PlyaerContext";
 
 const App = () => {
   const { audioRef, track } = useContext(PlayerContext);
-  console.log(track);
+
   return (
     <div className="h-dvh bg-black">
       <div className="h-9/10 flex">
